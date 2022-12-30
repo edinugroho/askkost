@@ -4,6 +4,7 @@ namespace Tests\Unit\Services;
 
 use Mockery;
 use Tests\TestCase;
+use App\Models\User;
 use InvalidArgumentException;
 use App\Services\OwnerService;
 use App\Repositories\OwnerRepository;
@@ -58,5 +59,20 @@ class OwnerServiceTest extends TestCase
         $this->expectException(ValidationException::class);
         
         app(OwnerService::class)->check($data);
+    }
+
+    public function test_it_throw_error_when_empty_name()
+    {
+        $data = [
+            'name' => '', 
+            'username' => 'username', 
+            'email' => 'email@mail.co', 
+            'password' => 'password',
+        ];
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The name field is required.');
+
+        app(OwnerService::class)->saveUser($data);
     }
 }
