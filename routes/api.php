@@ -24,6 +24,7 @@ Route::get('/', function() {
 });
 
 Route::post('/users', [UserController::class, 'create']);
+Route::post('/users/login', [UserController::class, 'login']);
 
 Route::post('/owners', [OwnerController::class, 'create']);
 Route::post('/owners/login', [OwnerController::class, 'login']);
