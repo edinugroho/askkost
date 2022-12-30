@@ -15,6 +15,7 @@ class userRepository
         $this->user = $user;
 
         $user['password'] = bcrypt($user['password']);
+        $user['credit'] = $user['type'] == 'regular' ? 20 : 40;
 
         return $this->user->save();
     }

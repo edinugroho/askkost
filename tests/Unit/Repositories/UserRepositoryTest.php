@@ -24,4 +24,18 @@ class UserRepositoryTest extends TestCase
 
         $this->assertModelExists($user);
     }
+
+    public function test_it_regular_user_given_20_credits()
+    {
+        $user = User::factory()->make([
+            'type' => 'regular'
+        ]);
+
+        app(UserRepository::class)->save($user);
+
+        $this->assertDatabaseHas('users', [
+            'type' => 'regular',
+            'credit' => 20
+        ]);
+    }
 }
