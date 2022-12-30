@@ -82,4 +82,19 @@ class UserServiceTest extends TestCase
 
         app(UserService::class)->saveUser($data);
     }
+
+    public function test_it_throw_error_when_invalid_all_field()
+    {
+        $data = [
+            'name' => '', 
+            'username' => '', 
+            'email' => 'email', 
+            'password' => '', 
+            'type' => ''
+        ];
+
+        $this->expectException(InvalidArgumentException::class);
+
+        app(UserService::class)->saveUser($data);
+    }
 }
