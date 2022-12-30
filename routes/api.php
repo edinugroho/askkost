@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\OwnerController;
+use Illuminate\Routing\RouteGroup;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,14 +24,22 @@ Route::get('/', function() {
     ], 200); 
 });
 
-Route::post('/users', [UserController::class, 'create']);
-Route::post('/users/login', [UserController::class, 'login']);
-Route::middleware(['auth:sanctum', 'type.user'])->get('/users', [UserController::class, 'index']);
+Route::prefix('/users')->group(function () {
+    Route::post('/', [UserController::class, 'create']);
+    Route::post('/login', [UserController::class, 'login']);
+});
 
-Route::post('/owners', [OwnerController::class, 'create']);
-Route::post('/owners/login', [OwnerController::class, 'login']);
-Route::middleware(['auth:sanctum', 'type.owner'])->get('/owners', [OwnerController::class, 'index']);
+Route::prefix('/owners')->group(function () {
+    Route::post('/', [OwnerController::class, 'create']);
+    Route::post('/login', [OwnerController::class, 'login']);
+});
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['middleware' => ['auth:sanctum']], function() {
+    Route::group(['middleware' => ['type.owner'], 'prefix' => 'owners'], function() {
+        Route::get('/', [OwnerController::class, 'index']);
+    });
+
+    Route::group(['middleware' => ['type.user'], 'prefix' => 'users'], function() {
+        Route::get('/', [UserController::class, 'index']);
+    });
 });
