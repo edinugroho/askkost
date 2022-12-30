@@ -26,4 +26,16 @@ class OwnerRepositoryTest extends TestCase
             'name' => $owner->name
         ]);
     }
+
+    public function test_can_find_user_by_email()
+    {
+        $owner = Owner::factory()->make([
+            'email' => 'email@mail.co'
+        ]);
+        $owner->save();
+
+        $result = app(OwnerRepository::class)->find($owner->email);
+
+        $this->assertModelExists($result);
+    }
 }

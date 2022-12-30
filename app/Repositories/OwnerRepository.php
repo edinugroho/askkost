@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Owner;
+use Illuminate\Support\Facades\Hash;
 
 class OwnerRepository 
 {
@@ -18,5 +19,12 @@ class OwnerRepository
         $this->owner['password'] = bcrypt($owner['password']);
 
         return $this->owner->save();
+    }
+
+    public function find($email)
+    {
+        return $this->owner->where([
+           'email' => $email
+        ])->first();
     }
 }
