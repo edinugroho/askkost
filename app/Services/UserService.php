@@ -30,4 +30,16 @@ class UserService
 
         return $this->userRepository->save($data);
     }
+
+    public function check($data)
+    {
+        $validator = Validator::make($data, [
+            'email' => ['required', 'email'],
+            'password' => ['required']
+        ]);
+
+        if ($validator->fails()) {
+            throw new InvalidArgumentException($validator->errors());
+        }
+    }
 }

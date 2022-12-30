@@ -7,6 +7,7 @@ use Tests\TestCase;
 use App\Services\UserService;
 use InvalidArgumentException;
 use App\Repositories\UserRepository;
+use Illuminate\Validation\ValidationException;
 
 class UserServiceTest extends TestCase
 {
@@ -96,5 +97,17 @@ class UserServiceTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         app(UserService::class)->saveUser($data);
+    }
+
+    public function test_it_can_validate_data()
+    {
+        $data = [
+            'email' => '', 
+            'password' => '',
+        ];
+        
+        $this->expectException(InvalidArgumentException::class);
+
+        app(UserService::class)->check($data);
     }
 }
