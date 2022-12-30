@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use InvalidArgumentException;
 use App\Repositories\userRepository;
+use Illuminate\Support\Facades\Validator;
 
 class UserService 
 {
@@ -14,6 +16,14 @@ class UserService
 
     public function saveUser($data)  
     {
+        $validator = Validator::make($data, [
+            'type' => ['in:regular,premium']
+        ]);
+
+        if ($validator->fails()) {
+            throw new InvalidArgumentException($validator->errors()->first());
+        }
+
         return $this->userRepository->save($data);
     }
 }
