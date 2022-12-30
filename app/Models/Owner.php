@@ -4,19 +4,25 @@ namespace App\Models;
 
 use App\Models\Kost;
 use App\Models\Question;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
-class Owner extends Model
+use Illuminate\Foundation\Auth\User as Authenticatable;
+class Owner extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, HasApiTokens;
 
     protected $fillable = [
         'name',
         'username',
         'email',
         'password'
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token'
     ];
 
     /**
