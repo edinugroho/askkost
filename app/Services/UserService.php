@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use InvalidArgumentException;
-use App\Repositories\userRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Validator;
 
 class UserService 
@@ -11,7 +11,7 @@ class UserService
     public $userRepository;
 
     public function __construct() {
-        $this->userRepository = app(userRepository::class);
+        $this->userRepository = app(UserRepository::class);
     }
 
     public function saveUser($data)  

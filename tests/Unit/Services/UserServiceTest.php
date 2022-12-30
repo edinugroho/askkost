@@ -6,7 +6,7 @@ use Mockery;
 use Tests\TestCase;
 use App\Services\UserService;
 use InvalidArgumentException;
-use App\Repositories\userRepository;
+use App\Repositories\UserRepository;
 
 class UserServiceTest extends TestCase
 {
@@ -26,7 +26,7 @@ class UserServiceTest extends TestCase
             'credit' => 20
         ];
 
-        $this->instance(userRepository::class, Mockery::mock(userRepository::class, function ($mock) use ($data) {
+        $this->instance(UserRepository::class, Mockery::mock(UserRepository::class, function ($mock) use ($data) {
             $mock->shouldReceive('save')->with($data)->once();
         }));
 
