@@ -25,6 +25,7 @@ Route::get('/', function() {
 
 Route::post('/users', [UserController::class, 'create']);
 Route::post('/users/login', [UserController::class, 'login']);
+Route::middleware('auth:sanctum')->get('/users', [UserController::class, 'index']);
 
 Route::post('/owners', [OwnerController::class, 'create']);
 Route::post('/owners/login', [OwnerController::class, 'login']);

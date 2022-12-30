@@ -6,6 +6,7 @@ use Exception;
 use App\Services\UserService;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\LoginRequest;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -47,6 +48,24 @@ class UserController extends Controller
                 'error' => $e->getMessage()
             ];
         } 
+
+        return response()->json($result);
+    }
+
+    public function index(Request $request)
+    {
+        $result = [
+            'status' => 200
+        ];
+
+        try {
+            $result['data'] = $request->user();
+        } catch (Exception $e) {
+            $result = [
+                'status' => 500,
+                'error' => $e->getMessage()
+            ];
+        }
 
         return response()->json($result);
     }
