@@ -17,7 +17,7 @@ class UserService
     public function saveUser($data)  
     {
         $validator = Validator::make($data, [
-            'type' => ['in:regular,premium']
+            'type' => ['required', 'in:regular,premium']
         ]);
 
         if ($validator->fails()) {

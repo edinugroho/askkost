@@ -49,4 +49,21 @@ class UserServiceTest extends TestCase
 
         app(UserService::class)->saveUser($data);
     }
+    
+    public function test_it_throw_error_when_empty_type()
+    {
+        $data = [
+            'name' => 'name', 
+            'username' => 'username', 
+            'email' => 'email@mail.co', 
+            'password' => 'password', 
+            'type' => '', 
+            'credit' => 20
+        ];
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The type field is required.');
+
+        app(UserService::class)->saveUser($data);
+    }
 }
