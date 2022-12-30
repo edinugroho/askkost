@@ -38,4 +38,18 @@ class UserRepositoryTest extends TestCase
             'credit' => 20
         ]);
     }
+    
+    public function test_it_premium_user_given_40_credits()
+    {
+        $user = User::factory()->make([
+            'type' => 'regular'
+        ]);
+
+        app(UserRepository::class)->save($user);
+
+        $this->assertDatabaseHas('users', [
+            'type' => 'regular',
+            'credit' => 20
+        ]);
+    }
 }
