@@ -21,4 +21,11 @@ class UserRepository
         
         return $this->user->save();
     }
+
+    public function find($email)
+    {
+        return $this->user->where([
+           'email' => $email
+        ])->first();
+    }
 }

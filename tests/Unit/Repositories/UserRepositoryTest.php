@@ -54,4 +54,16 @@ class UserRepositoryTest extends TestCase
             'credit' => 20
         ]);
     }
+
+    public function test_can_find_user_by_email()
+    {
+        $user = User::factory()->make([
+            'email' => 'email@mail.co'
+        ]);
+        $user->save();
+
+        $result = app(UserRepository::class)->find($user->email);
+
+        $this->assertModelExists($result);
+    }
 }
