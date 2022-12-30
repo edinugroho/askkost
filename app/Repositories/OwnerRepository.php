@@ -12,9 +12,10 @@ class OwnerRepository
 
     public function save($owner)
     {
-        $this->owner = $owner;
-
-        $user['password'] = bcrypt($owner['password']);
+        $this->owner['name'] = $owner['name'];
+        $this->owner['email'] = $owner['email'];
+        $this->owner['username'] = $owner['username'];
+        $this->owner['password'] = bcrypt($owner['password']);
 
         return $this->owner->save();
     }

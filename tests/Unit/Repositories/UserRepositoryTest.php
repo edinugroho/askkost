@@ -22,7 +22,9 @@ class UserRepositoryTest extends TestCase
 
         app(UserRepository::class)->save($user);
 
-        $this->assertModelExists($user);
+        $this->assertDatabaseHas('users', [
+            'name' => $user->name
+        ]);
     }
 
     public function test_it_regular_user_given_20_credits()

@@ -18,10 +18,12 @@ class OwnerRepositoryTest extends TestCase
      */
     public function test_it_can_save_owner()
     {
-        $user = Owner::factory()->make();
+        $owner = Owner::factory()->make();
 
-        app(OwnerRepository::class)->save($user);
+        app(OwnerRepository::class)->save($owner);
 
-        $this->assertModelExists($user);
+        $this->assertDatabaseHas('owners', [
+            'name' => $owner->name
+        ]);
     }
 }
