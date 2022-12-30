@@ -66,4 +66,20 @@ class UserServiceTest extends TestCase
 
         app(UserService::class)->saveUser($data);
     }
+
+    public function test_it_throw_error_when_empty_type_and_name()
+    {
+        $data = [
+            'name' => '', 
+            'username' => 'username', 
+            'email' => 'email@mail.co', 
+            'password' => 'password', 
+            'type' => '', 
+            'credit' => 20
+        ];
+
+        $this->expectException(InvalidArgumentException::class);
+
+        app(UserService::class)->saveUser($data);
+    }
 }

@@ -17,11 +17,12 @@ class UserService
     public function saveUser($data)  
     {
         $validator = Validator::make($data, [
+            'name' => ['required'],
             'type' => ['required', 'in:regular,premium']
         ]);
 
         if ($validator->fails()) {
-            throw new InvalidArgumentException($validator->errors()->first());
+            throw new InvalidArgumentException($validator->errors());
         }
 
         return $this->userRepository->save($data);
