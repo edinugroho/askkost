@@ -42,5 +42,18 @@ class OwnerService
         if ($validator->fails()) {
             throw new InvalidArgumentException($validator->errors());
         }
+
+        $owner = $this->ownerRepository->find($data['email']);
+
+        if (!$owner && !Hash::check($data['password'], $owner['password'])) {
+            throw ValidationException::withMessages([
+                'email' => ['Credentials are incorrect.'],
+            ]);
+        }
+
+        return [
+            'owner' => $owner,
+            'token' => $owner->createToken('api', ['role:owner'])->plainTextToken
+        ];
     }
 }
