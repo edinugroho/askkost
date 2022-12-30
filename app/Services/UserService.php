@@ -4,7 +4,9 @@ namespace App\Services;
 
 use InvalidArgumentException;
 use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class UserService 
 {
@@ -41,5 +43,18 @@ class UserService
         if ($validator->fails()) {
             throw new InvalidArgumentException($validator->errors());
         }
+
+        $user = $this->userRepository->find($data['email']);
+
+        if (!$user && !Hash::check($data['password'], $user['password'])) {
+            throw ValidationException::withMessages([
+                'email' => ['Credentials are incorrect.'],
+            ]);
+        }
+
+        return [
+            'user' => $user,
+            'token' => $user->createToken('api', ['role:user'])->plainTextToken
+        ];
     }
 }

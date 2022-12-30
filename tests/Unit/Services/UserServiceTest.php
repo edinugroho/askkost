@@ -110,4 +110,20 @@ class UserServiceTest extends TestCase
 
         app(UserService::class)->check($data);
     }
+
+    public function test_it_throw_error_if_password_not_match()
+    {
+        $data = [
+            'email' => 'email@mail.co', 
+            'password' => 'password',
+        ];
+
+        $this->instance(UserRepository::class, Mockery::mock(UserRepository::class, function ($mock) use ($data) {
+            $mock->shouldReceive('find')->with($data['email'])->once()->andReturn(null);
+        }));
+
+        $this->expectException(ValidationException::class);
+        
+        app(UserService::class)->check($data);
+    }
 }
