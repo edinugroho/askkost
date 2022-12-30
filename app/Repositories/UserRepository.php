@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Models\User;
 
-class userRepository 
+class UserRepository 
 {
     public function __construct() {
         $this->user = app(User::class);
