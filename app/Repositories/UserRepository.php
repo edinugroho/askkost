@@ -14,6 +14,8 @@ class userRepository
     {
         $this->user = $user;
 
+        $user['password'] = bcrypt($user['password']);
+
         return $this->user->save();
     }
 }
