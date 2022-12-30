@@ -3,8 +3,10 @@
 namespace App\Services;
 
 use InvalidArgumentException;
+use Illuminate\Support\Facades\Hash;
 use App\Repositories\OwnerRepository;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class OwnerService 
 {
@@ -28,5 +30,17 @@ class OwnerService
         }
 
         return $this->ownerRepository->save($data);
+    }
+
+    public function check($data)
+    {
+        $validator = Validator::make($data, [
+            'email' => ['required', 'email'],
+            'password' => ['required']
+        ]);
+
+        if ($validator->fails()) {
+            throw new InvalidArgumentException($validator->errors());
+        }
     }
 }

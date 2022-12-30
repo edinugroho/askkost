@@ -4,6 +4,7 @@ namespace Tests\Unit\Services;
 
 use Mockery;
 use Tests\TestCase;
+use InvalidArgumentException;
 use App\Services\OwnerService;
 use App\Repositories\OwnerRepository;
 
@@ -28,5 +29,17 @@ class OwnerServiceTest extends TestCase
         }));
 
         app(OwnerService::class)->saveUser($data);
+    }
+
+    public function test_it_can_validate_data()
+    {
+        $data = [
+            'email' => '', 
+            'password' => '',
+        ];
+        
+        $this->expectException(InvalidArgumentException::class);
+
+        app(OwnerService::class)->check($data);
     }
 }
