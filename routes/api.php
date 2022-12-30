@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->get('/users', [UserController::class, 'index'
 
 Route::post('/owners', [OwnerController::class, 'create']);
 Route::post('/owners/login', [OwnerController::class, 'login']);
+Route::middleware('auth:sanctum')->get('/owners', [OwnerController::class, 'index']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

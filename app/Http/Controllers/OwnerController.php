@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Services\OwnerService;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\OwnerRequest;
@@ -46,6 +47,24 @@ class OwnerController extends Controller
                 'error' => $e->getMessage()
             ];
         } 
+
+        return response()->json($result);
+    }
+
+    public function index(Request $request)
+    {
+        $result = [
+            'status' => 200
+        ];
+
+        try {
+            $result['data'] = $request->user();
+        } catch (Exception $e) {
+            $result = [
+                'status' => 500,
+                'error' => $e->getMessage()
+            ];
+        }
 
         return response()->json($result);
     }
