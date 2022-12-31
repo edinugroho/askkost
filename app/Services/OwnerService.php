@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use InvalidArgumentException;
+use App\Repositories\KostRepository;
 use Illuminate\Support\Facades\Hash;
 use App\Repositories\OwnerRepository;
 use Illuminate\Support\Facades\Validator;
@@ -11,9 +12,11 @@ use Illuminate\Validation\ValidationException;
 class OwnerService 
 {
     public $ownerRepository;
+    public $kostRepository;
 
     public function __construct() {
         $this->ownerRepository = app(OwnerRepository::class);
+        $this->kostRepository = app(KostRepository::class);
     }
 
     public function saveUser($data)  
@@ -55,5 +58,21 @@ class OwnerService
             'owner' => $owner,
             'token' => $owner->createToken('api', ['role:owner'])->plainTextToken
         ];
+    }
+
+    public function saveKost($data)
+    {
+        $validator = Validator::make($data, [
+            'name' => ['required'],
+            'location' => ['required'],
+            'type' => ['required', 'in:man,woman,together'],
+            'price' => ['required', 'numeric'],
+        ]);
+
+        if ($validator->fails()) {
+            throw new InvalidArgumentException($validator->errors());
+        }
+
+
     }
 }

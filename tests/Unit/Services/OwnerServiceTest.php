@@ -75,4 +75,18 @@ class OwnerServiceTest extends TestCase
 
         app(OwnerService::class)->saveUser($data);
     }
+
+    public function test_owner_throw_error_invalid_data()
+    {
+        $data = [
+            'name' => '',
+            'location' => '',
+            'type' => '',
+            'price' => '',
+        ];
+
+        $this->expectException(InvalidArgumentException::class);
+
+        app(OwnerService::class)->saveKost($data);
+    }
 }
