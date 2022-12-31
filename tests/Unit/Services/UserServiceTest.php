@@ -160,4 +160,28 @@ class UserServiceTest extends TestCase
 
         app(UserService::class)->ask($data);
     }
+
+    public function test_user_cant_ask_while_credit_is_up()
+    {
+        Owner::factory()->create(['id' => 1]);
+        $data = [
+            'kost_id' => 1,
+            'user_id' => 1,
+            'status' => 'asked',
+            'owner_id' => 1
+        ];
+
+        $this->instance(KostRepository::class, Mockery::mock(KostRepository::class, function ($mock) use ($data) {
+            $mock->shouldReceive('findById')->with($data['kost_id'])->once()->andReturn(Kost::factory()->make());
+        }));
+        
+        $this->instance(UserRepository::class, Mockery::mock(UserRepository::class, function ($mock) use ($data) {
+            $mock->shouldReceive('findById')->with($data['user_id'])->once()->andReturn(User::factory()->make(['credit' => 0]));
+        }));
+
+        $this->expectException(ValidationException::class);
+
+
+        app(UserService::class)->ask($data);
+    }
 }
