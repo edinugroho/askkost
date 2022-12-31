@@ -38,6 +38,7 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
         Route::get('/', [OwnerController::class, 'index']);
 
         Route::prefix('/kosts')->group(function () {
+            Route::get('/', [KostController::class, 'index_owner']);
             Route::post('/', [KostController::class, 'create']);
             Route::patch('/{id}', [KostController::class, 'update']);
             Route::delete('/{id}', [KostController::class, 'destroy']);
@@ -48,4 +49,6 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::group(['middleware' => ['type.user'], 'prefix' => 'users'], function() {
         Route::get('/', [UserController::class, 'index']);
     });
+
+    Route::get('/kosts', [KostController::class, 'index']);
 });

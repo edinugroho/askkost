@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\FacilityKostRequest;
 use Illuminate\Http\Request;
+use App\Services\KostService;
 use App\Services\OwnerService;
 use App\Http\Requests\KostRequest;
+use App\Http\Requests\FacilityKostRequest;
 
 class KostController extends Controller
 {
     public function __construct() {
         $this->ownerService = app(OwnerService::class);
+        $this->kostService = app(KostService::class);
     }
 
     public function create(KostRequest $request)
@@ -79,6 +81,42 @@ class KostController extends Controller
             $request->merge(['kost_id' => $id]);
             $request->merge(['owner_id' => $request->user()->id]);
             $result['data'] = $this->ownerService->facilityKost($request->all(), $id);
+        } catch (Exception $e) {
+            $result = [
+                'status' => 500,
+                'error' => $e->getMessage()
+            ];
+        }
+
+        return response()->json($result);
+    }
+
+    public function index()
+    {
+        $result = [
+            'status' => 200
+        ];
+
+        try {;
+            $result['data'] = $this->kostService->all();
+        } catch (Exception $e) {
+            $result = [
+                'status' => 500,
+                'error' => $e->getMessage()
+            ];
+        }
+
+        return response()->json($result);
+    }
+
+    public function index_owner(Request $request)
+    {
+        $result = [
+            'status' => 200
+        ];
+
+        try {;
+            $result['data'] = $this->kostService->byOwner($request->user()->id);
         } catch (Exception $e) {
             $result = [
                 'status' => 500,
