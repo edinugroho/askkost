@@ -23,7 +23,7 @@ class KostRepository
 
     public function update($data, $id)
     {
-        $kost = $this->kost->find($id);
+        $kost = $this->kost->findOrFail($id);
 
         $kost->name = $data['name'];
         $kost->location = $data['location'];
@@ -35,11 +35,11 @@ class KostRepository
 
     public function findByid($id)
     {
-        return $this->kost->find($id);
+        return $this->kost->findOrFail($id);
     }
 
     public function delete($id)
     {
-        return $this->kost->find($id)->delete();
+        return $this->kost->findOrFail($id)->delete();
     }
 }
