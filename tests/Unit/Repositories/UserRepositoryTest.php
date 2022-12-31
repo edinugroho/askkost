@@ -77,4 +77,18 @@ class UserRepositoryTest extends TestCase
 
         $this->assertModelExists($result);
     }
+    
+    public function test_can_decrease_user_credit_by_id()
+    {
+        User::factory()->create([
+            'id' => 1,
+            'type' => 'regular'
+        ]);
+
+        $result = app(UserRepository::class)->decreaseCreditById(1);
+
+        $this->assertDatabaseHas('users', [
+            'credit' => 15
+        ]);
+    }
 }

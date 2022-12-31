@@ -33,4 +33,9 @@ class UserRepository
     {
         return $this->user->findOrFail($id);
     }
+    
+    public function decreaseCreditById($id)
+    {
+        return $this->findById($id)->decrement('credit', 5);
+    }
 }
