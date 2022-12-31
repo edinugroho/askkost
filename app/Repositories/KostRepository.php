@@ -32,4 +32,9 @@ class KostRepository
 
         return $kost->update();
     }
+
+    public function findByid($id)
+    {
+        return $this->kost->find($id);
+    }
 }

@@ -8,6 +8,9 @@ use App\Models\Owner;
 use App\Repositories\KostRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
+use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertObjectEquals;
+
 class KostRepositoryTest extends TestCase
 {
     use RefreshDatabase;
@@ -48,5 +51,17 @@ class KostRepositoryTest extends TestCase
         $this->assertDatabaseHas('kosts', [
             'name' => $data['name']
         ]);
+    }
+
+    public function test_it_can_find_owner()
+    {
+        $owner = Owner::all()->first();
+        $kost = Kost::factory()->create([
+            'owner_id' => $owner->id
+        ]);
+
+        $actual = app(KostRepository::class)->findByid($kost->id);
+
+        $this->assertSame($owner->id, $actual->owner_id);
     }
 }
