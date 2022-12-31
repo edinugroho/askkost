@@ -19,7 +19,7 @@ class CreateQuestionsTable extends Migration
             $table->foreignId('owner_id')->references('id')->on('owners')->onDelete('cascade');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->enum('status', ['asked', 'answered']);
-            $table->enum('available', ['yes', 'no'])->default(null);
+            $table->enum('available', ['yes', 'no'])->nullable();
             $table->timestamps();
         });
     }
