@@ -4,13 +4,21 @@ namespace Tests\Unit\Services;
 
 use Mockery;
 use Tests\TestCase;
+use App\Models\Kost;
+use App\Models\User;
+use App\Models\Owner;
 use App\Services\UserService;
 use InvalidArgumentException;
+use App\Repositories\KostRepository;
+use App\Repositories\QuestionRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UserServiceTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * A basic unit test example.
      *
@@ -125,5 +133,31 @@ class UserServiceTest extends TestCase
         $this->expectException(ValidationException::class);
         
         app(UserService::class)->check($data);
+    }
+
+    public function test_user_can_ask_kost()
+    {
+        Owner::factory()->create(['id' => 1]);
+        $data = [
+            'kost_id' => 1,
+            'user_id' => 1,
+            'status' => 'asked',
+            'owner_id' => 1
+        ];
+
+        $this->instance(KostRepository::class, Mockery::mock(KostRepository::class, function ($mock) use ($data) {
+            $mock->shouldReceive('findById')->with($data['kost_id'])->once()->andReturn(Kost::factory()->make());
+        }));
+        
+        $this->instance(UserRepository::class, Mockery::mock(UserRepository::class, function ($mock) use ($data) {
+            $mock->shouldReceive('findById')->with($data['user_id'])->once()->andReturn(User::factory()->make());
+            $mock->shouldReceive('decreaseCreditById')->with($data['user_id'])->once()->andReturn(true);
+        }));
+
+        $this->instance(QuestionRepository::class, Mockery::mock(QuestionRepository::class, function ($mock) use ($data) {
+            $mock->shouldReceive('ask')->with($data)->once()->andReturn(true);
+        }));
+
+        app(UserService::class)->ask($data);
     }
 }
