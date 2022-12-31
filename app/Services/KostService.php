@@ -24,7 +24,8 @@ class KostService
     {
         return QueryBuilder::for($this->kost->where('owner_id', $id))
             ->with('facility')
-            ->allowedFilters(['name', 'location', 'price'])
+            ->with('questions')
+            ->allowedFilters(['name', 'location', 'price', 'questions.status'])
             ->allowedSorts('price')
             ->get();
     }
