@@ -217,4 +217,22 @@ class OwnerServiceTest extends TestCase
 
         app(OwnerService::class)->deleteKost($owner['id'], $id);
     }
+
+    public function test_owner_can_validate_facility()
+    {
+        $id = 1;
+        $data = [
+            'parking' => '',
+            'bathroom' => '',
+            'security' => '',
+            'table' => '',
+            'chair' => '',
+            'cupboard' => '',
+            'bed' => '',
+        ];
+
+        $this->expectException(InvalidArgumentException::class);
+
+        app(OwnerService::class)->facilityKost($data, $id);
+    }
 }

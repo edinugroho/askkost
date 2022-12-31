@@ -6,6 +6,7 @@ use InvalidArgumentException;
 use App\Repositories\KostRepository;
 use Illuminate\Support\Facades\Hash;
 use App\Repositories\OwnerRepository;
+use App\Repositories\FacilityRepository;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
@@ -14,10 +15,12 @@ class OwnerService
 {
     public $ownerRepository;
     public $kostRepository;
+    public $facilityRepository;
 
     public function __construct() {
         $this->ownerRepository = app(OwnerRepository::class);
         $this->kostRepository = app(KostRepository::class);
+        $this->facilityRepository = app(FacilityRepository::class);
     }
 
     public function saveUser($data)  
@@ -105,5 +108,28 @@ class OwnerService
         }
 
         return $this->kostRepository->delete($id);
+    }
+
+    public function facilityKost($data, $id)
+    {
+        $validator = Validator::make($data, [
+            'parking' => ['required', 'in:car,motorcycle,car and motorcycle'],
+            'bathroom' => ['required', 'in:inside,outside'],
+            'security' => ['required', 'in:yes,no'],
+            'table' => ['required', 'in:yes,no'],
+            'chair' => ['required', 'in:yes,no'],
+            'cupboard' => ['required', 'in:yes,no'],
+            'bed' => ['required', 'in:yes,no'],
+        ]);
+
+        if ($validator->fails()) {
+            throw new InvalidArgumentException($validator->errors());
+        }
+
+        if ($this->kostRepository->findByid($id)->owner_id != $data['owner_id']) {
+            throw new AuthenticationException;
+        }
+
+        return $this->facilityRepository->save($data);
     }
 }
