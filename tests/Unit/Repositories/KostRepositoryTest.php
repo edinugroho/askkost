@@ -64,4 +64,22 @@ class KostRepositoryTest extends TestCase
 
         $this->assertSame($owner->id, $actual->owner_id);
     }
+
+    public function test_it_can_delete_kost()
+    {
+        $data = [
+            'id' => 1,
+            'name' => 'name',
+            'location' => 'location',
+            'type' => 'woman',
+            'price' => 900000,
+        ];
+        Kost::factory()->create($data);
+
+        app(KostRepository::class)->delete($data['id']);
+        
+        $this->assertDatabaseMissing('kosts', [
+            'name' => $data['name']
+        ]);
+    }
 }

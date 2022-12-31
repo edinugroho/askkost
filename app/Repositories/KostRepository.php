@@ -37,4 +37,9 @@ class KostRepository
     {
         return $this->kost->find($id);
     }
+
+    public function delete($id)
+    {
+        return $this->kost->find($id)->delete();
+    }
 }
