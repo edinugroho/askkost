@@ -82,7 +82,8 @@ class UserRepositoryTest extends TestCase
     {
         User::factory()->create([
             'id' => 1,
-            'type' => 'regular'
+            'type' => 'regular',
+            'credit' => 20
         ]);
 
         $result = app(UserRepository::class)->decreaseCreditById(1);
