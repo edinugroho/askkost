@@ -73,6 +73,6 @@ class OwnerService
             throw new InvalidArgumentException($validator->errors());
         }
 
-
+        return $this->kostRepository->save($data);
     }
 }

@@ -5,6 +5,7 @@ namespace Tests\Unit\Services;
 use Mockery;
 use Tests\TestCase;
 use App\Models\User;
+use App\Repositories\KostRepository;
 use InvalidArgumentException;
 use App\Services\OwnerService;
 use App\Repositories\OwnerRepository;
@@ -86,6 +87,23 @@ class OwnerServiceTest extends TestCase
         ];
 
         $this->expectException(InvalidArgumentException::class);
+
+        app(OwnerService::class)->saveKost($data);
+    }
+
+    public function test_owner_can_save_kost()
+    {
+        $data = [
+            'owner_id' => 1,
+            'name' => 'name',
+            'location' => 'location',
+            'type' => 'man',
+            'price' => 100000,
+        ];
+
+        $this->instance(KostRepository::class, Mockery::mock(KostRepository::class, function ($mock) use ($data) {
+            $mock->shouldReceive('save')->with($data)->once()->andReturn(true);
+        }));
 
         app(OwnerService::class)->saveKost($data);
     }
