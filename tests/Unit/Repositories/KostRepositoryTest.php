@@ -32,4 +32,21 @@ class KostRepositoryTest extends TestCase
             'name' => $kost->name
         ]);
     }
+
+    public function test_it_can_update_kost_by_id()
+    {
+        $kost = Kost::factory()->create();
+        $data = [
+            'name' => 'new name',
+            'location' => 'new location',
+            'type' => 'woman',
+            'price' => 900000,
+        ];
+
+        app(KostRepository::class)->update($data, $kost->id);
+
+        $this->assertDatabaseHas('kosts', [
+            'name' => $data['name']
+        ]);
+    }
 }

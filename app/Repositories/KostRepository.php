@@ -20,4 +20,16 @@ class KostRepository
 
         return $this->kost->save();
     }
+
+    public function update($data, $id)
+    {
+        $kost = $this->kost->find($id);
+
+        $kost->name = $data['name'];
+        $kost->location = $data['location'];
+        $kost->type = $data['type'];
+        $kost->price = $data['price'];
+
+        return $kost->update();
+    }
 }
