@@ -7,6 +7,7 @@ use App\Repositories\KostRepository;
 use Illuminate\Support\Facades\Hash;
 use App\Repositories\OwnerRepository;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
 
 class OwnerService 
@@ -78,15 +79,20 @@ class OwnerService
 
     public function updateKost($data, $id)
     {
+        
         $validator = Validator::make($data, [
             'name' => ['required'],
             'location' => ['required'],
             'type' => ['required', 'in:man,woman,together'],
             'price' => ['required', 'numeric'],
         ]);
-
+        
         if ($validator->fails()) {
             throw new InvalidArgumentException($validator->errors());
+        }
+        
+        if ($this->kostRepository->findByid($id)->owner_id != $data['owner_id']) {
+            throw new AuthenticationException;
         }
 
         return $this->kostRepository->update($data, $id);

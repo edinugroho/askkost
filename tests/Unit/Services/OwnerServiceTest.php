@@ -4,10 +4,11 @@ namespace Tests\Unit\Services;
 
 use Mockery;
 use Tests\TestCase;
-use App\Models\User;
-use App\Repositories\KostRepository;
+use App\Models\Kost;
+use App\Models\Owner;
 use InvalidArgumentException;
 use App\Services\OwnerService;
+use App\Repositories\KostRepository;
 use App\Repositories\OwnerRepository;
 use Illuminate\Validation\ValidationException;
 
@@ -125,15 +126,20 @@ class OwnerServiceTest extends TestCase
 
     public function test_owner_can_update_kost()
     {
+        Owner::factory()->create([
+            'id' => 2
+        ]);
         $id = 1;
         $data = [
+            'owner_id' => 2,
             'name' => 'name',
             'location' => 'location',
             'type' => 'man',
             'price' => 100000,
         ];
-
+        
         $this->instance(KostRepository::class, Mockery::mock(KostRepository::class, function ($mock) use ($data, $id) {
+            $mock->shouldReceive('findByid')->with($id)->once()->andReturn(Kost::factory()->make());
             $mock->shouldReceive('update')->with($data, $id)->once()->andReturn(true);
         }));
 
