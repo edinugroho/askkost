@@ -41,6 +41,7 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
             Route::post('/', [KostController::class, 'create']);
             Route::patch('/{id}', [KostController::class, 'update']);
             Route::delete('/{id}', [KostController::class, 'destroy']);
+            Route::post('/{id}/details', [KostController::class, 'detail']);
         });
     });
 
