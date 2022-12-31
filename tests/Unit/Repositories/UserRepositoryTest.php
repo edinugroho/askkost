@@ -66,4 +66,15 @@ class UserRepositoryTest extends TestCase
 
         $this->assertModelExists($result);
     }
+
+    public function test_can_find_user_by_id()
+    {
+        User::factory()->create([
+            'id' => 1
+        ]);
+
+        $result = app(UserRepository::class)->findById(1);
+
+        $this->assertModelExists($result);
+    }
 }

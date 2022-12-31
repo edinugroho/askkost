@@ -28,4 +28,9 @@ class UserRepository
            'email' => $email
         ])->first();
     }
+
+    public function findById($id)
+    {
+        return $this->user->findOrFail($id);
+    }
 }
