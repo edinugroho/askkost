@@ -37,6 +37,10 @@ Route::prefix('/owners')->group(function () {
 Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::group(['middleware' => ['type.owner'], 'prefix' => 'owners'], function() {
         Route::get('/', [OwnerController::class, 'index']);
+
+        Route::prefix('/kosts')->group(function () {
+            Route::post('/', [OwnerController::class, 'kost']);
+        });
     });
 
     Route::group(['middleware' => ['type.user'], 'prefix' => 'users'], function() {

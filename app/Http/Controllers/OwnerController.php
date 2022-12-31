@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\OwnerService;
+use App\Http\Requests\KostRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\OwnerRequest;
 
@@ -59,6 +60,25 @@ class OwnerController extends Controller
 
         try {
             $result['data'] = $request->user();
+        } catch (Exception $e) {
+            $result = [
+                'status' => 500,
+                'error' => $e->getMessage()
+            ];
+        }
+
+        return response()->json($result);
+    }
+
+    public function kost(KostRequest $request)
+    {
+        $result = [
+            'status' => 200
+        ];
+
+        try {
+            $request->merge(['owner_id' => $request->user()->id]);
+            $result['data'] = $this->ownerService->saveKost($request->all());
         } catch (Exception $e) {
             $result = [
                 'status' => 500,
