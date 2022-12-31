@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Services\OwnerService;
 use App\Http\Requests\KostRequest;
 
@@ -39,6 +40,24 @@ class KostController extends Controller
         try {
             $request->merge(['owner_id' => $request->user()->id]);
             $result['data'] = $this->ownerService->updateKost($request->all(), $id);
+        } catch (Exception $e) {
+            $result = [
+                'status' => 500,
+                'error' => $e->getMessage()
+            ];
+        }
+
+        return response()->json($result);
+    }
+
+    public function destroy(Request $request, $id)
+    {
+        $result = [
+            'status' => 200
+        ];
+
+        try {
+            $result['data'] = $this->ownerService->deleteKost($request->user()->id, $id);
         } catch (Exception $e) {
             $result = [
                 'status' => 500,
