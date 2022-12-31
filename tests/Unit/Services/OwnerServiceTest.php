@@ -11,10 +11,13 @@ use App\Services\OwnerService;
 use App\Repositories\KostRepository;
 use App\Repositories\OwnerRepository;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Validation\ValidationException;
 
 class OwnerServiceTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * A basic unit test example.
      *
@@ -188,5 +191,30 @@ class OwnerServiceTest extends TestCase
         $this->expectException(AuthenticationException::class);
 
         app(OwnerService::class)->deleteKost($data, $id);
+    }
+
+    public function test_owner_can_delete_kost()
+    {
+        $id = 1;
+        $owner = [
+            'id' => 3
+        ];
+        $data = [
+            'id' => 1,
+            'owner_id' => 3,
+            'name' => 'name',
+            'location' => 'location',
+            'type' => 'man',
+            'price' => 100000,
+        ];
+        Owner::factory()->create($owner);
+        Kost::factory()->create($data);
+
+        $this->instance(KostRepository::class, Mockery::mock(KostRepository::class, function ($mock) use ($id) {
+            $mock->shouldReceive('findByid')->with($id)->once()->andReturn(Kost::factory()->make());
+            $mock->shouldReceive('delete')->with($id)->once()->andReturn(true);
+        }));
+
+        app(OwnerService::class)->deleteKost($owner['id'], $id);
     }
 }
