@@ -122,4 +122,21 @@ class OwnerServiceTest extends TestCase
 
         app(OwnerService::class)->updateKost($data, $id);
     }
+
+    public function test_owner_can_update_kost()
+    {
+        $id = 1;
+        $data = [
+            'name' => 'name',
+            'location' => 'location',
+            'type' => 'man',
+            'price' => 100000,
+        ];
+
+        $this->instance(KostRepository::class, Mockery::mock(KostRepository::class, function ($mock) use ($data, $id) {
+            $mock->shouldReceive('update')->with($data, $id)->once()->andReturn(true);
+        }));
+
+        app(OwnerService::class)->updateKost($data, $id);
+    }
 }

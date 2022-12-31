@@ -88,5 +88,7 @@ class OwnerService
         if ($validator->fails()) {
             throw new InvalidArgumentException($validator->errors());
         }
+
+        return $this->kostRepository->update($data, $id);
     }
 }
