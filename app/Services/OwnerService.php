@@ -97,4 +97,13 @@ class OwnerService
 
         return $this->kostRepository->update($data, $id);
     }
+
+    public function deleteKost($owner_id, $id)
+    {   
+        if ($this->kostRepository->findByid($id)->owner_id != $owner_id) {
+            throw new AuthenticationException;
+        }
+
+        return $this->kostRepository->delete($id);
+    }
 }

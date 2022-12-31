@@ -167,4 +167,26 @@ class OwnerServiceTest extends TestCase
 
         app(OwnerService::class)->updateKost($data, $id);
     }
+
+    public function test_owner_cant_delete_kost()
+    {
+        $id = 1;
+        $data = [
+            'id' => 1,
+            'name' => 'name',
+            'location' => 'location',
+            'type' => 'man',
+            'price' => 100000,
+        ];
+        Owner::factory()->create();
+        Kost::factory()->create($data);
+
+        $this->instance(KostRepository::class, Mockery::mock(KostRepository::class, function ($mock) use ($id) {
+            $mock->shouldReceive('findByid')->with($id)->once()->andReturn(Kost::factory()->make());
+        }));
+
+        $this->expectException(AuthenticationException::class);
+
+        app(OwnerService::class)->deleteKost($data, $id);
+    }
 }
