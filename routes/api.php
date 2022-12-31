@@ -48,6 +48,9 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
 
     Route::group(['middleware' => ['type.user'], 'prefix' => 'users'], function() {
         Route::get('/', [UserController::class, 'index']);
+        Route::prefix('/kosts')->group(function () {
+            Route::post('/{id}', [KostController::class, 'ask']);
+        });
     });
 
     Route::get('/kosts', [KostController::class, 'index']);
