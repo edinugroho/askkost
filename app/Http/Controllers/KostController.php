@@ -29,4 +29,23 @@ class KostController extends Controller
 
         return response()->json($result);
     }
+
+    public function update(KostRequest $request, $id)
+    {
+        $result = [
+            'status' => 200
+        ];
+
+        try {
+            $request->merge(['owner_id' => $request->user()->id]);
+            $result['data'] = $this->ownerService->updateKost($request->all(), $id);
+        } catch (Exception $e) {
+            $result = [
+                'status' => 500,
+                'error' => $e->getMessage()
+            ];
+        }
+
+        return response()->json($result);
+    }
 }

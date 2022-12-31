@@ -39,6 +39,7 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
 
         Route::prefix('/kosts')->group(function () {
             Route::post('/', [KostController::class, 'create']);
+            Route::patch('/{id}', [KostController::class, 'update']);
         });
     });
 
