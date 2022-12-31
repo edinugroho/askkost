@@ -75,4 +75,18 @@ class OwnerService
 
         return $this->kostRepository->save($data);
     }
+
+    public function updateKost($data, $id)
+    {
+        $validator = Validator::make($data, [
+            'name' => ['required'],
+            'location' => ['required'],
+            'type' => ['required', 'in:man,woman,together'],
+            'price' => ['required', 'numeric'],
+        ]);
+
+        if ($validator->fails()) {
+            throw new InvalidArgumentException($validator->errors());
+        }
+    }
 }
