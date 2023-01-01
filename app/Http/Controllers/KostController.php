@@ -148,4 +148,25 @@ class KostController extends Controller
 
         return response()->json($result);
     }
+    
+    public function answer(Request $request, $kost_id, $question_id)
+    {
+        $result = [
+            'status' => 200
+        ];
+
+        try {
+            $request->merge(['kost_id' => $kost_id]);
+            $request->merge(['question_id' => $question_id]);
+            $request->merge(['owner_id' => $request->user()->id]);
+            $result['data'] = $this->ownerService->answer($request->all());
+        } catch (Exception $e) {
+            $result = [
+                'status' => 500,
+                'error' => $e->getMessage()
+            ];
+        }
+
+        return response()->json($result);
+    }
 }

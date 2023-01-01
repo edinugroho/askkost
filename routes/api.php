@@ -43,6 +43,7 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
             Route::patch('/{id}', [KostController::class, 'update']);
             Route::delete('/{id}', [KostController::class, 'destroy']);
             Route::post('/{id}/details', [KostController::class, 'detail']);
+            Route::post('/{kost_id}/answers/{queestion_id}', [KostController::class, 'answer']);
         });
     });
 
