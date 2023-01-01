@@ -170,4 +170,22 @@ class KostController extends Controller
 
         return response()->json($result);
     }
+
+    public function index_user(Request $request)
+    {
+        $result = [
+            'status' => 200
+        ];
+
+        try {;
+            $result['data'] = $this->kostService->byUser($request->user()->id);
+        } catch (Exception $e) {
+            $result = [
+                'status' => 500,
+                'error' => $e->getMessage()
+            ];
+        }
+
+        return response()->json($result);
+    }
 }
