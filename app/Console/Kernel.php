@@ -15,7 +15,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('reset:credits')
+            ->monthly()
+            ->appendOutputTo(storage_path('logs/credit.log'));
     }
 
     /**
