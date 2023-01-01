@@ -37,4 +37,21 @@ class QuestionRepositoryTest extends TestCase
             'status' => 'asked'
         ]);
     }
+
+    public function test_can_update_answer_of_question()
+    {
+        Question::factory()->create(['status' => 'asked']);
+
+        $data = [
+            'question_id' => Question::all()->random()->id,
+            'available' => 'yes',
+            'status' => 'answered'
+        ];
+        
+        app(QuestionRepository::class)->answer($data);
+
+        $this->assertDatabaseHas('questions', [
+            'status' => 'answered'
+        ]);
+    }
 }

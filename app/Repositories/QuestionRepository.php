@@ -19,4 +19,14 @@ class QuestionRepository
 
         return $this->question->save();
     }
+
+    public function answer($data)
+    {
+        $question = $this->question->findOrFail($data['question_id']);
+
+        return $question->update([
+            'status' => $data['status'],
+            'available' => $data['available']
+        ]);
+    }
 }
