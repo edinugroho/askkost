@@ -85,10 +85,7 @@ class OwnerService
 
     public function updateKost($data, $id)
     {
-        
         $validator = Validator::make($data, [
-            'name' => ['required'],
-            'location' => ['required'],
             'type' => ['required', 'in:man,woman,together'],
             'price' => ['required', 'numeric'],
         ]);

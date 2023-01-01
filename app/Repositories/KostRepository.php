@@ -25,12 +25,7 @@ class KostRepository
     {
         $kost = $this->kost->findOrFail($id);
 
-        $kost->name = $data['name'];
-        $kost->location = $data['location'];
-        $kost->type = $data['type'];
-        $kost->price = $data['price'];
-
-        return $kost->update();
+        return $kost->update($data);
     }
 
     public function findByid($id)

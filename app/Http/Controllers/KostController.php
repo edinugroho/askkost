@@ -7,6 +7,7 @@ use App\Services\KostService;
 use App\Services\UserService;
 use App\Services\OwnerService;
 use App\Http\Requests\KostRequest;
+use App\Http\Requests\KostUpdateRequest;
 use App\Http\Requests\FacilityKostRequest;
 
 class KostController extends Controller
@@ -36,7 +37,7 @@ class KostController extends Controller
         return response()->json($result);
     }
 
-    public function update(KostRequest $request, $id)
+    public function update(KostUpdateRequest $request, $id)
     {
         $result = [
             'status' => 200
