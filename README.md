@@ -84,6 +84,21 @@ askkost is a backend service which build with Laravel v.8.x for serving kost dat
     ```
     > code coverage will generate as html format and can seen in the browser, the file is saved in `/reports/dashboard.html`
 
+## Scheduler
+
+command to run task scheduler in this project
+
+```
+php artisan schedule:run
+```
+
+to mannualy resets user credits you can run artisan comand
+
+```
+php artisan reset:credits
+```
+> for run on the server you should add cronjob
+
 ## Postman resource
 
 TBD
