@@ -5,16 +5,17 @@ namespace Tests\Unit\Services;
 use Mockery;
 use Tests\TestCase;
 use App\Models\Kost;
+use App\Models\User;
 use App\Models\Owner;
 use App\Models\Question;
-use App\Models\User;
 use InvalidArgumentException;
 use App\Services\OwnerService;
 use App\Repositories\KostRepository;
 use App\Repositories\OwnerRepository;
+use App\Repositories\QuestionRepository;
 use Illuminate\Auth\AuthenticationException;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class OwnerServiceTest extends TestCase
 {
@@ -274,6 +275,49 @@ class OwnerServiceTest extends TestCase
         }));
 
         $this->expectException(AuthenticationException::class);
+
+        app(OwnerService::class)->answer($answer);
+    }
+
+    public function test_owner_can_answer()
+    {
+        $id = 1;
+        $answer = [
+            "available" => "yes",
+            "kost_id" => 1,
+            "question_id" => 1,
+            "owner_id" => 1,
+            "status" => "answered"
+        ];
+        $kost = [
+            'id' => 1,
+            'owner_id' => 1
+        ];
+        $owner = [
+            'id' => 1,
+        ];
+        $user = [
+            'id' => 1,
+        ];
+        $question = [
+            'id' => 1,
+            'owner_id' => 1,
+            'kost_id' => 1,
+            'user_id' => 1,
+        ];
+
+        Owner::factory()->create($owner);
+        User::factory()->create($user);
+        Kost::factory()->create($kost);
+        Question::factory()->create($question);
+
+        $this->instance(KostRepository::class, Mockery::mock(KostRepository::class, function ($mock) use ($id) {
+            $mock->shouldReceive('findByid')->with($id)->once()->andReturn(Kost::factory()->make());
+        }));
+
+        $this->instance(QuestionRepository::class, Mockery::mock(QuestionRepository::class, function ($mock) use ($answer) {
+            $mock->shouldReceive('answer')->with($answer)->once()->andReturn(true);
+        }));
 
         app(OwnerService::class)->answer($answer);
     }
