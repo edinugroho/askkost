@@ -101,4 +101,4 @@ php artisan reset:credits
 
 ## Postman resource
 
-TBD
+[Api Docs](https://documenter.getpostman.com/view/1001255/2s8Z6zyriU)
