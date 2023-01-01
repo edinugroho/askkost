@@ -7,6 +7,7 @@ use App\Repositories\KostRepository;
 use Illuminate\Support\Facades\Hash;
 use App\Repositories\OwnerRepository;
 use App\Repositories\FacilityRepository;
+use App\Repositories\QuestionRepository;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
@@ -16,11 +17,13 @@ class OwnerService
     public $ownerRepository;
     public $kostRepository;
     public $facilityRepository;
+    public $questionRepository;
 
     public function __construct() {
         $this->ownerRepository = app(OwnerRepository::class);
         $this->kostRepository = app(KostRepository::class);
         $this->facilityRepository = app(FacilityRepository::class);
+        $this->questionRepository = app(QuestionRepository::class);
     }
 
     public function saveUser($data)  
@@ -131,5 +134,16 @@ class OwnerService
         }
 
         return $this->facilityRepository->save($data);
+    }
+
+    public function answer($data)
+    {
+        if ($this->kostRepository->findByid($data['kost_id'])->owner_id != $data['owner_id']) {
+            throw new AuthenticationException;
+        }
+
+        $data['status'] = 'answered';
+
+        return $this->questionRepository->answer($data);
     }
 }

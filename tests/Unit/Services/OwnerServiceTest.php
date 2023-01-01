@@ -6,6 +6,8 @@ use Mockery;
 use Tests\TestCase;
 use App\Models\Kost;
 use App\Models\Owner;
+use App\Models\Question;
+use App\Models\User;
 use InvalidArgumentException;
 use App\Services\OwnerService;
 use App\Repositories\KostRepository;
@@ -234,5 +236,45 @@ class OwnerServiceTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         app(OwnerService::class)->facilityKost($data, $id);
+    }
+
+    public function test_throw_error_when_owner_not_authorized_to_answer()
+    {
+        $id = 1;
+        $answer = [
+            "available" => "yes",
+            "kost_id" => 1,
+            "question_id" => 1,
+            "owner_id" => 10
+        ];
+        $kost = [
+            'id' => 1,
+            'owner_id' => 1
+        ];
+        $owner = [
+            'id' => 1,
+        ];
+        $user = [
+            'id' => 1,
+        ];
+        $question = [
+            'id' => 1,
+            'owner_id' => 1,
+            'kost_id' => 1,
+            'user_id' => 1,
+        ];
+
+        Owner::factory()->create($owner);
+        User::factory()->create($user);
+        Kost::factory()->create($kost);
+        Question::factory()->create($question);
+
+        $this->instance(KostRepository::class, Mockery::mock(KostRepository::class, function ($mock) use ($id) {
+            $mock->shouldReceive('findByid')->with($id)->once()->andReturn(Kost::factory()->make());
+        }));
+
+        $this->expectException(AuthenticationException::class);
+
+        app(OwnerService::class)->answer($answer);
     }
 }
